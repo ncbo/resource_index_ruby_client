@@ -151,7 +151,8 @@ module NCBO
                          "&conceptids=#{@options[:conceptids].join(",")}",
                          "&ontologiesToKeepInResult=#{@options[:ontologiesToKeepInResult].join(",")}",
                          "&isVirtualOntologyId=#{@options[:isVirtualOntologyId]}",
-                         "&apikey=#{@options[:apikey]}"].join("")).read
+                         "&apikey=#{@options[:apikey]}",
+                         "&mode=#{@options[:mode]}"].join("")).read
       Parser::ResourceIndex.parse_ranked_element_results(result_xml)
     end
     
