@@ -1,2 +1,2 @@
-
+*.gem
 test/local_test.rb
