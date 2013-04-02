@@ -144,7 +144,7 @@ module NCBO
       raise ArgumentError, ":conceptids must be included" if @options[:conceptids].nil? || @options[:conceptids].empty?
       raise ArgumentError, ":resourceids must be an array" unless @options[:resourceids].kind_of? Array
       
-      result_xml = open(["#{@options[:resource_index_location]}",
+      result_url = ["#{@options[:resource_index_location]}",
                          "elements-ranked-by-concepts/#{@options[:resourceids].join(",")}",
                          "?offset=#{@options[:offset]}",
                          "&limit=#{@options[:limit]}",
@@ -152,7 +152,8 @@ module NCBO
                          "&ontologiesToKeepInResult=#{@options[:ontologiesToKeepInResult].join(",")}",
                          "&isVirtualOntologyId=#{@options[:isVirtualOntologyId]}",
                          "&apikey=#{@options[:apikey]}",
-                         "&mode=#{@options[:mode]}"].join("")).read
+                         "&mode=#{@options[:mode]}"].join("")
+      result_xml = open(result_url).read
       Parser::ResourceIndex.parse_ranked_element_results(result_xml)
     end
     
