@@ -12,6 +12,11 @@ module NCBO
     class RankedElements
       attr_accessor :concepts, :resources
     end
+    
+    class Element
+      attr_accessor :id, :resource, :text, :weights, :ontoIds
+      alias :localElementId :id
+    end
 
   end
 end
