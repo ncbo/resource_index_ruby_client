@@ -79,4 +79,15 @@ class TestResourceIndex < Test::Unit::TestCase
     assert !test_ontology.nil?
   end
   
+  def test_element
+    ri = NCBO::ResourceIndex.new(:apikey => APIKEY, :resource_index_location => LOCATION)
+    id = "E-GEOD-18509"
+    element = ri.element(id, "AE")
+    assert_equal element.id, "E-GEOD-18509"
+    assert !element.text.nil?
+    assert !element.weights.nil?
+    assert !element.resource.nil?
+    assert !element.ontoIds.nil?
+  end
+  
 end
