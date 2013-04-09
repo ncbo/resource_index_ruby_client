@@ -211,16 +211,16 @@ module NCBO
       
       def parse_element(annotation)
         a = {}
-        a[:localElementId] = annotation.find_first("element/localElementId").content unless annotation.find_first("element/localElementId").nil?
+        a[:localElementId] = annotation.find_first("#{element_location}/localElementId").content unless annotation.find_first("#{element_location}/localElementId").nil?
         # element text
         a[:text] = {}
-        annotation.find("element/elementStructure/contexts/*").each {|context| a[:text][context.children[0].content] = context.children[1].content}
+        annotation.find("#{element_location}/elementStructure/contexts/*").each {|context| a[:text][context.children[0].content] = context.children[1].content}
         # element weights
         a[:weights] = []
-        annotation.find("element/elementStructure/weights/*").each {|weight| a[:weights] << {:name => weight.children[0].content, :weight => weight.children[1].content.to_f} }
+        annotation.find("#{element_location}/elementStructure/weights/*").each {|weight| a[:weights] << {:name => weight.children[0].content, :weight => weight.children[1].content.to_f} }
         # which element portions are associated with an ontology
         a[:ontoIds] = {}
-        annotation.find("element/elementStructure/ontoIds/*").each {|ont_id| a[:ontoIds][ont_id.children[0].content] = ont_id.children[1].content.to_i}
+        annotation.find("#{element_location}/elementStructure/ontoIds/*").each {|ont_id| a[:ontoIds][ont_id.children[0].content] = ont_id.children[1].content.to_i}
         return a
       end
     end
