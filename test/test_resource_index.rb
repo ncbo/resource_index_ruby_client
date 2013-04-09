@@ -1,5 +1,5 @@
 require "test/unit"
-require "ncbo_resource_index"
+require_relative "../lib/ncbo_resource_index"
 
 class TestResourceIndex < Test::Unit::TestCase
   APIKEY = "your_apikey"

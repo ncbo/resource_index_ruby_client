@@ -3,8 +3,8 @@ require 'xml'
 require 'uri'
 require 'open-uri'
 require 'cgi'
-require 'ncbo_resource_index/parser'
-require 'ncbo_resource_index/data'
+require_relative 'ncbo_resource_index/parser'
+require_relative 'ncbo_resource_index/data'
 
 
 module NCBO
