@@ -15,7 +15,7 @@ class TestResourceIndex < Test::Unit::TestCase
     
     melanoma = resource_index.find_by_concept("1032/Melanoma")
     cancer = resource_index.find_by_concept("1032/Malignant_Neoplasm")
-    assert melanoma[1].annotations != cancer[1].annotations
+    assert cancer != melanoma
   end
   
   def test_direct_usage
@@ -26,13 +26,17 @@ class TestResourceIndex < Test::Unit::TestCase
   def test_alternative_location
     alt_location = "http://stagerest.bioontology.org/resource_index/"
     resource_index = NCBO::ResourceIndex.new(:apikey => APIKEY, :resource_index_location => alt_location)
-    assert resource_index.options[:annotator_location] == alt_location
+    assert resource_index.options[:resource_index_location] == alt_location
   end
   
   def test_find_by_concept
     result = NCBO::ResourceIndex.find_by_concept("1032/Melanoma", :apikey => APIKEY, :resource_index_location => LOCATION)
     assert result[1].annotations.kind_of?(Array)
-    assert result[1].annotations.length > 1
+    contains_results = false
+    result.each do |res|
+      contains_results = true if res.annotations.length > 1
+    end
+    assert contains_results
   end
   
   def test_find_by_element
