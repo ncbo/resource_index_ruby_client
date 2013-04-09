@@ -51,13 +51,12 @@ module NCBO
       end
       
       def parse_results(options = {})
-        resource ||= options[:resource]
         annotation_location ||= options[:annotation_location]
         
         results = []
         @results.find("/success/data/list/*").each do |result|
           resource_annotations = NCBO::ResourceIndex::Annotations.new
-          resource_annotations.resource = resource ||= result.find_first("resourceId").content
+          resource_annotations.resource = result.find_first("resourceId").content
 
           # Check to see if parameters are enabled that will change how we process the output
           with_context = result.find_first("withContext").content.eql?("true") rescue false
@@ -118,7 +117,22 @@ module NCBO
         end
         concepts
       end
-
+      
+      def self.parse_element_results(results)
+        new(results).parse_element_results
+      end
+      
+      def parse_element_results
+        element = parse_element(@results.find_first("/success/data"), "obs.obr.populate.Element")
+        new_element = NCBO::ResourceIndex::Element.new
+        new_element.id = element[:localElementId]
+        new_element.weights = element[:weights]
+        new_element.ontoIds = element[:ontoIds]
+        new_element.text = element[:text]
+        new_element.resource = element[:text].first[0].split("_")[0]
+        new_element
+      end
+        
       def self.parse_element_annotations(results)
         new(results).parse_element_annotations
       end
@@ -209,7 +223,7 @@ module NCBO
         a
       end
       
-      def parse_element(annotation)
+      def parse_element(annotation, element_location = "element")
         a = {}
         a[:localElementId] = annotation.find_first("#{element_location}/localElementId").content unless annotation.find_first("#{element_location}/localElementId").nil?
         # element text
