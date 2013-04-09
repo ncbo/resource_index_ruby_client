@@ -2,7 +2,7 @@ require "test/unit"
 require_relative "../lib/ncbo_resource_index"
 
 class TestResourceIndex < Test::Unit::TestCase
-  APIKEY = "your_apikey"
+  APIKEY = ENV["APIKEY"] || ""
   LOCATION = "http://rest.bioontology.org/resource_index/"
 
   def test_apikey
