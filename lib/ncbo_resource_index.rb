@@ -130,6 +130,27 @@ module NCBO
       end
       primary_annotations
     end
+    
+    def self.element(element_id, resource_id, options = {})
+      new(options).element(element_id, resource_id)
+    end
+    
+    def element(element_id, resource_id)
+      @options.merge!(options) unless options.empty?
+      
+      raise ArugmentError, "element_id must be provided" if element_id.nil?
+      raise ArugmentError, "resource_id must be provided" if resource_id.nil?
+
+      result_url = [
+        "#{@options[:resource_index_location]}",
+        "elementDetails/#{resource_id}",
+        "?elementid=#{element_id}",
+        "&apikey=#{@options[:apikey]}"
+      ].join("")
+      
+      result_xml = open(result_url).read
+      Parser::ResourceIndex.parse_element_results(result_xml)
+    end
 
     def self.ranked_elements(concepts, options = {})
       new(options).ranked_elements(concepts)
