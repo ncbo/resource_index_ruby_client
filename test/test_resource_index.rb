@@ -1,5 +1,5 @@
 require "test/unit"
-require_relative "../lib/ncbo_resource_index"
+require_relative "../lib/ncbo_resource_index_client"
 
 class TestResourceIndex < Test::Unit::TestCase
   APIKEY = ENV["APIKEY"] || ""

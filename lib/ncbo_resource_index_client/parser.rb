@@ -129,7 +129,7 @@ module NCBO
         new_element.weights = element[:weights]
         new_element.ontoIds = element[:ontoIds]
         new_element.text = element[:text]
-        new_element.resource = element[:text].first[0].split("_")[0]
+        new_element.resource = element[:text].first[0].split("_")[0] unless element[:text].first.nil?
         new_element
       end
         

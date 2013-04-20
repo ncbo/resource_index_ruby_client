@@ -3,8 +3,8 @@ require 'xml'
 require 'uri'
 require 'open-uri'
 require 'cgi'
-require_relative 'ncbo_resource_index/parser'
-require_relative 'ncbo_resource_index/data'
+require_relative 'ncbo_resource_index_client/parser'
+require_relative 'ncbo_resource_index_client/data'
 
 
 module NCBO
@@ -85,7 +85,7 @@ module NCBO
     end
     
     def self.element_annotations(element, concepts, resource, options = {})
-      new(options).element_annotations(element, concepts)
+      new(options).element_annotations(element, concepts, resource)
     end
     
     def element_annotations(element, concepts, resource)
@@ -200,7 +200,7 @@ module NCBO
       popular_concepts
     end
 
-    def self.ontologies(options)
+    def self.ontologies(options = {})
       new(options).ontologies
     end
     
