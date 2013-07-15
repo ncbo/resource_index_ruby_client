@@ -44,6 +44,9 @@ module NCBO
       @options[:counts] = false
       @options[:request_timeout] = 300
       
+      # Internal
+      @options[:debug] = false
+      
       @options.merge!(args)
       
       @ontologies = nil
@@ -100,16 +103,21 @@ module NCBO
         ontology_id = split_concept[0]
         concept_id = split_concept[1]
         virtual = @options[:isVirtualOntologyId] ? "/virtual" : ""
-        result_xml = open(["#{@options[:resource_index_location]}",
-                           "details/#{@options[:elementDetails]}",
-                           virtual,
-                           "/concept/#{ontology_id}",
-                           "/resource/#{resource}",
-                           "/#{@options[:offset]}",
-                           "/#{@options[:limit]}",
-                           "?conceptid=#{CGI.escape(concept_id)}",
-                           "&elementid=#{CGI.escape(element)}",
-                           "&apikey=#{@options[:apikey]}"].join("")).read
+        result_url = [
+          "#{@options[:resource_index_location]}",
+          "details/#{@options[:elementDetails]}",
+          virtual,
+          "/concept/#{ontology_id}",
+          "/resource/#{resource}",
+          "/#{@options[:offset]}",
+          "/#{@options[:limit]}",
+          "?conceptid=#{CGI.escape(concept_id)}",
+          "&elementid=#{CGI.escape(element)}",
+          "&apikey=#{@options[:apikey]}"
+        ].join("")
+        
+        puts result_url if @options[:debug]
+        result_xml = open(result_url).read
 
         annotations = Parser::ResourceIndex.parse_element_annotations(result_xml)
         concept_annotations << annotations
@@ -147,7 +155,7 @@ module NCBO
         "?elementid=#{element_id}",
         "&apikey=#{@options[:apikey]}"
       ].join("")
-      
+      puts result_url if @options[:debug]
       result_xml = open(result_url).read
       Parser::ResourceIndex.parse_element_results(result_xml)
     end
@@ -166,14 +174,15 @@ module NCBO
       raise ArgumentError, ":resourceids must be an array" unless @options[:resourceids].kind_of? Array
       
       result_url = ["#{@options[:resource_index_location]}",
-                         "elements-ranked-by-concepts/#{@options[:resourceids].join(",")}",
-                         "?offset=#{@options[:offset]}",
-                         "&limit=#{@options[:limit]}",
-                         "&conceptids=#{@options[:conceptids].join(",")}",
-                         "&ontologiesToKeepInResult=#{@options[:ontologiesToKeepInResult].join(",")}",
-                         "&isVirtualOntologyId=#{@options[:isVirtualOntologyId]}",
-                         "&apikey=#{@options[:apikey]}",
-                         "&mode=#{@options[:mode]}"].join("")
+        "elements-ranked-by-concepts/#{@options[:resourceids].join(",")}",
+        "?offset=#{@options[:offset]}",
+        "&limit=#{@options[:limit]}",
+        "&conceptids=#{@options[:conceptids].join(",")}",
+        "&ontologiesToKeepInResult=#{@options[:ontologiesToKeepInResult].join(",")}",
+        "&isVirtualOntologyId=#{@options[:isVirtualOntologyId]}",
+        "&apikey=#{@options[:apikey]}",
+        "&mode=#{@options[:mode]}"].join("")
+      puts result_url if @options[:debug]
       result_xml = open(result_url).read
       Parser::ResourceIndex.parse_ranked_element_results(result_xml)
     end
