@@ -277,6 +277,7 @@ module NCBO
           request_body << "#{k}=#{v}"
         end
       end
+      puts "POST to #{url.path}, body: #{request_body}" if @options[:debug]
       req = Net::HTTP::Post.new(url.path)
       req.body = request_body.join("&")
       http = Net::HTTP.new(url.host, url.port)
